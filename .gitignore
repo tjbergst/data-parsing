@@ -1,0 +1,8 @@
+# checkpoints
+.ipynb_checkpoints/
+
+# data
+data/
+
+# altair json
+altair-*.json
