@@ -11,7 +11,7 @@ Class to process and analyze real recorded wifi data or simulated data produced 
 - path_dict {dict} -- dictionary of file paths (must be `pathlib.Path` objects)
 
 ### path_dict configs
-There are two provided dictionaries of data paths, `real_data_path_dict` and `transition_matrics_path_dict`. Each dictionary contains a unique key used to select the desired file and a `pathlib.Path` object referencing the desired file. All files must be valid in order to execute, remove invalid or unnecessary paths by commenting out the lines, ex:
+There are two provided dictionaries of data paths, `real_data_path_dict` and `transition_matrics_path_dict`. Each dictionary contains a unique key used to select the desired file and a `pathlib.Path` object referencing the desired file. All files must be valid in order to execute, remove invalid or unnecessary paths by commenting out the lines.
 
 ```python
 real_data_path_dict = {
@@ -100,6 +100,20 @@ WTA.simulate_all_transition_matrices(n_samples=100_000, m_trials=10)
 To view the interactive state length distribution plots, call the `.state_length_vs_timestep_sim()` method with desired formatting arguments:
 ```python
 WTA.state_length_vs_timestep_sim(
+    chart_type='bar',
+    background_color='#abb2bf',
+    lower_bound=25,
+    upper_bound=200
+)
+```
+
+### code only example
+
+```python
+WTA_real = WifiTrafficAnalyzer(mode='sim', path_dict=transition_matrices_path_dict)
+WTA_real.process_transition_matrices('tmat_2')
+WTA_real.simulate_all_transition_matrices(n_samples=1_000_000, m_trials=100)
+WTA_real.state_length_vs_timestep_sim(
     chart_type='bar',
     background_color='#abb2bf',
     lower_bound=25,
