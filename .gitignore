@@ -6,3 +6,7 @@ data/
 
 # altair json
 altair-*.json
+
+# pycache
+__pycache__/
+*.pyc
