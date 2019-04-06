@@ -199,11 +199,11 @@ class WifiTrafficAnalyzer:
     
     def simulate_all_OP_transition_matrices(self, tmat_dataframe, n_samples=int(1e5), m_trials=10):        
         start_time = time.time()
-        sim_data_matrix = np.zeros((tmat_dataframe.shape[0], n_samples))        
+        sim_data_matrix = np.zeros((tmat_dataframe.shape[0] + 1, n_samples))        
         
         for row in tqdm_notebook(tmat_dataframe.itertuples(), total=tmat_dataframe.shape[0]):
             transition_matrix = [row.OnOn, row.OnOff, row.OffOff, row.OffOn]
-            sim_data_matrix[row.Index, :] = self.generate_sim_data(n_samples, m_trials, transition_matrix)            
+            sim_data_matrix[row.Index + 1, :] = self.generate_sim_data(n_samples, m_trials, transition_matrix)            
             
         print(f'total elapsed time: {(time.time() - start_time)/60:0.2f} minutes')
         
