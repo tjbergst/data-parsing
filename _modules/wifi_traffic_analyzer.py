@@ -14,7 +14,7 @@ from altair.expr import datum
 
 class WifiTrafficAnalyzer:
     def __init__(self, mode, path_dict): 
-        print('initializing..')
+        print('initializing WTA..')
         
         # set mode
         mode_options = ['sim','real']
@@ -184,7 +184,7 @@ class WifiTrafficAnalyzer:
     
                 return np.random.binomial(1, p)
             
-        for i in tnrange(m_trials, leave=False):
+        for i in range(m_trials):
             sim_data = [1,1,1]
             p = 0.5
             
@@ -196,16 +196,33 @@ class WifiTrafficAnalyzer:
         
         return sim_matrix
     
+    
+    def simulate_all_OP_transition_matrices(self, tmat_dataframe, n_samples=int(1e5), m_trials=10):        
+        start_time = time.time()
+        sim_data_matrix = np.zeros((tmat_dataframe.shape[0], n_samples))        
         
-    def simulate_all_transition_matrices(self, n_samples=int(1e5), m_trials=10, output_data=False):        
+        for row in tqdm_notebook(tmat_dataframe.itertuples(), total=tmat_dataframe.shape[0]):
+            transition_matrix = [row.OnOn, row.OnOff, row.OffOff, row.OffOn]
+            sim_data_matrix[row.Index, :] = self.generate_sim_data(n_samples, m_trials, transition_matrix)            
+            
+        print(f'total elapsed time: {(time.time() - start_time)/60:0.2f} minutes')
+        
+        return sim_data_matrix
+    
+        
+    def simulate_all_transition_matrices(self, tmat_dataframe=None, n_samples=int(1e5), m_trials=10, 
+                                               postprocess=True, output_data=False):        
+        if tmat_dataframe is None:
+            tmat_dataframe = self.tmat_df
+        
         start_time = time.time()
 
         self.stats_dict = self.master_dictionary = {
             row.timestep: {}
-            for row in self.tmat_df.itertuples()
+            for row in tmat_dataframe.itertuples()
         }
         
-        for row in tqdm_notebook(self.tmat_df.itertuples(), total=self.tmat_df.shape[0]):
+        for row in tqdm_notebook(tmat_dataframe.itertuples(), total=tmat_dataframe.shape[0]):
             transition_matrix = [row.OnOn, row.OnOff, row.OffOff, row.OffOn]
             sim_matrix = self.generate_sim_data(n_samples, m_trials, transition_matrix)    
             
@@ -222,7 +239,8 @@ class WifiTrafficAnalyzer:
             
         print(f'total elapsed time: {(time.time() - start_time)/60:0.2f} minutes')
         
-        self.post_process_sim_stats()
+        if postprocess:
+            self.post_process_sim_stats()
     
     
     

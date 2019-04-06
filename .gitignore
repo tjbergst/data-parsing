@@ -1,8 +1,14 @@
 # checkpoints
 .ipynb_checkpoints/
 
+# dsstore
+.DS_Store
+
+# dev
+dev/
+
 # data
-data/
+#data/
 
 # altair json
 altair-*.json
