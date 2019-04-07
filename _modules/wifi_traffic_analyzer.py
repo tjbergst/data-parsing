@@ -88,7 +88,8 @@ class WifiTrafficAnalyzer:
         
         real_data_list = []
     
-        for row in tqdm_notebook(df[['on_time','off_time']].iloc[1:].itertuples(), total=df.shape[0]-1):
+        #for row in tqdm_notebook(df[['on_time','off_time']].iloc[1:].itertuples(), total=df.shape[0]-1):
+        for row in df[['on_time','off_time']].iloc[1:].itertuples():
             real_data_list.extend([1 for i in range(int(row.on_time))])
             real_data_list.extend([0 for i in range(int(row.off_time))])
         
@@ -201,7 +202,8 @@ class WifiTrafficAnalyzer:
         start_time = time.time()
         sim_data_matrix = np.zeros((tmat_dataframe.shape[0] + 1, n_samples))        
         
-        for row in tqdm_notebook(tmat_dataframe.itertuples(), total=tmat_dataframe.shape[0]):
+        #for row in tqdm_notebook(tmat_dataframe.itertuples(), total=tmat_dataframe.shape[0]):
+        for row in tmat_dataframe.itertuples():
             transition_matrix = [row.OnOn, row.OnOff, row.OffOff, row.OffOn]
             sim_data_matrix[row.Index + 1, :] = self.generate_sim_data(n_samples, m_trials, transition_matrix)            
             
