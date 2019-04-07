@@ -207,7 +207,7 @@ class WifiTrafficAnalyzer:
             
         print(f'total elapsed time: {(time.time() - start_time)/60:0.2f} minutes')
         
-        return sim_data_matrix
+        return sim_data_matrix.astype('int')
     
         
     def simulate_all_transition_matrices(self, tmat_dataframe=None, n_samples=int(1e5), m_trials=10, 
